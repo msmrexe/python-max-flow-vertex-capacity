@@ -113,7 +113,7 @@ def main():
     print("Calculating max flow using Edmonds-Karp...")
     max_flow_value, residual_graph = find_max_flow(new_matrix, new_source, new_sink)
 
-    print("\n--- 3. Results ---")
+    print("\n--- Results ---")
     print(f"TOTAL MAXIMUM FLOW: {max_flow_value}")
 
     # 3. Report the flow distribution
