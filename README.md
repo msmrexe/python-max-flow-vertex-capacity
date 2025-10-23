@@ -101,7 +101,7 @@ $ python main.py sample_graph.json
 Loading graph from 'sample_graph.json'...
 Calculating max flow using Edmonds-Karp...
 
---- 3. Results ---
+--- Results ---
 TOTAL MAXIMUM FLOW: 29
 
 Flow through NODES:
