@@ -47,7 +47,7 @@ This new, larger graph now perfectly represents the original problem using *only
 ## Project Structure
 
 ```
-max-flow-project/
+python-max-flow-vertex-capacity/
 ├── .gitignore               # Git ignore file
 ├── LICENSE                  # MIT license file
 ├── README.md                # This documentation
