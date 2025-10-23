@@ -4,30 +4,45 @@ This project is a Python implementation of the Maximum Flow problem, specificall
 
 The program uses the **Edmonds-Karp** algorithm to find the maximum flow and reports the total flow as well as the flow distribution across all original nodes and edges.
 
-## Features
+## The Problem: Data Flow with Two Bottlenecks
 
-* **Solves Node Capacities:** Correctly finds the max flow in a graph with both node and edge capacities.
-* **Edmonds-Karp Algorithm:** Uses a clean, standard implementation of Edmonds-Karp (BFS on a residual graph).
-* **Modular Package Structure:** All logic is contained within the `maxflow/` Python package.
-    * `transformer.py`: Handles the vertex-splitting transformation.
-    * `edmonds_karp.py`: Contains the pure max-flow algorithm.
-* **Data-Driven:** The graph is loaded from a flexible `JSON` file instead of being hard-coded.
-* **Clear Results:** The output shows the total max flow and a detailed breakdown of the flow used on every node and edge.
+Imagine a computer network where you want to send a continuous stream of data from a **source** computer to a **sink** (destination) computer at the maximum possible speed. To do this, you can split the data into packets and send them along multiple paths.
 
-## How It Works: The Vertex-Splitting Transformation
+This network has two types of bottlenecks:
+
+1.  **Line Capacity (Edge Capacity):** Each physical connection *between* two computers (an edge) has a maximum bandwidth (e.g., 100 MB/s).
+2.  **Router Capacity (Node Capacity):** Each *computer* or router in the network (a node) can only process a certain amount of data per second (e.g., 500 MB/s).
+
+**The Goal:** Find the absolute maximum flow of data (in data per second) that can be sent from the source to the sink, respecting *both* the edge capacities and the node capacities.
+
+## The Solution: Vertex-Splitting Transformation
 
 The core challenge of this problem is that standard max-flow algorithms (like Edmonds-Karp) only support capacities on *edges*. They cannot enforce a capacity limit on a *node*.
 
 To solve this, we perform a graph transformation to create an equivalent graph that *only* has edge capacities.
 
 1.  **Split Nodes:** Every node `v` in the original graph (with capacity `C_v`) is split into two new nodes: an "in-node" `v_in` and an "out-node" `v_out`.
+
 2.  **Add Internal Edge:** A new *internal* edge is created from `v_in` to `v_out`. The capacity of this new edge is set to the capacity of the original node: `capacity(v_in, v_out) = C_v`. This new edge now correctly models the capacity of the node.
+
 3.  **Redirect Edges:** Every original edge `(u, v)` (with capacity `C_uv`) is re-routed in the new graph to connect the *out-node* of `u` to the *in-node* of `v`. The capacity remains the same: `capacity(u_out, v_in) = C_uv`.
+
 4.  **New Source & Sink:**
-    * The **new source** becomes the **out-node** of the original source (`source_out`).
-    * The **new sink** becomes the **in-node** of the original sink (`sink_in`).
+
+      * The **new source** becomes the **out-node** of the original source (`source_out`).
+      * The **new sink** becomes the **in-node** of the original sink (`sink_in`).
 
 This new, larger graph now perfectly represents the original problem using *only* edge capacities. We can run the standard Edmonds-Karp algorithm on it to find the max flow from `source_out` to `sink_in`.
+
+## Features
+
+  * **Solves Node Capacities:** Correctly finds the max flow in a graph with both node and edge capacities.
+  * **Edmonds-Karp Algorithm:** Uses a clean, standard implementation of Edmonds-Karp (BFS on a residual graph).
+  * **Modular Package Structure:** All logic is contained within the `maxflow/` Python package.
+      * `transformer.py`: Handles the vertex-splitting transformation.
+      * `edmonds_karp.py`: Contains the pure max-flow algorithm.
+  * **Data-Driven:** The graph is loaded from a flexible `JSON` file instead of being hard-coded.
+  * **Clear Results:** The output shows the total max flow and a detailed breakdown of the flow used on every node and edge.
 
 ## Project Structure
 
